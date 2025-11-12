@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
 
         {/* Footer bottom */}
         <div className="flex flex-wrap gap-5 justify-between items-center mt-6 w-full max-md:max-w-full">
-          <button className="flex gap-10 self-stretch px-3 py-2 text-sm leading-loose whitespace-nowrap rounded-md border border-solid bg-black bg-opacity-0 border-neutral-300 text-zinc-200">
+          <button className="flex gap-2 self-stretch px-3 py-2 text-sm leading-loose whitespace-nowrap rounded-md border border-solid bg-black bg-opacity-0 border-neutral-300 text-zinc-200">
             <span>English</span>
             <img
               loading="lazy"
