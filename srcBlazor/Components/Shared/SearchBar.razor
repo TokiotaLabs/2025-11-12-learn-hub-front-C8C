@@ -1,0 +1,31 @@
+@* Search bar component for filtering content *@
+
+<div class="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
+    <div class="flex flex-auto gap-3 px-3.5 py-2 text-base bg-white rounded-md border border-solid border-neutral-200 text-zinc-400">
+        <img loading="lazy"
+             src="https://cdn.builder.io/api/v1/image/assets/TEMP/1b19f0dd9df0f70b55d69e8ee067e9b4e6cac3eef1ecb70b77d50a06bb68d9df?placeholderIfAbsent=true&apiKey=43f93c4c444042188d8c548c6db7827a"
+             alt=""
+             class="object-contain shrink-0 w-5 aspect-square" />
+        <input type="search"
+               @bind="searchQuery"
+               @bind:event="oninput"
+               @onkeyup="HandleSearch"
+               placeholder="Search courses..."
+               class="flex-auto bg-transparent border-none outline-none" />
+    </div>
+    <button @onclick="HandleSearch" class="px-5 py-2 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 transition-colors">
+        Search
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private string searchQuery = string.Empty;
+
+    private async Task HandleSearch()
+    {
+        await OnSearch.InvokeAsync(searchQuery);
+    }
+}

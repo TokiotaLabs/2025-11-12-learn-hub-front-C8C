@@ -1,0 +1,13 @@
+@* Navigation item component with active state highlighting *@
+
+<NavLink href="@Href" class="overflow-hidden rounded-md bg-opacity-0 max-md:px-5 transition-all px-2 py-4 text-gray-600 hover:text-indigo-500" Match="NavLinkMatch.All">
+    <div class="self-center">@Label</div>
+</NavLink>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Href { get; set; } = string.Empty;
+}

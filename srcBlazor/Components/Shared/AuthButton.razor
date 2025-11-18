@@ -1,0 +1,35 @@
+@* Authentication button component - reusable button for auth actions *@
+
+<a href="@Url" class="@GetButtonClass()">
+    @if (!string.IsNullOrEmpty(IconUrl))
+    {
+        <img loading="lazy" src="@IconUrl" alt="@Label icon" class="object-contain shrink-0 self-stretch my-auto w-5 aspect-square" />
+    }
+    <span>@Label</span>
+</a>
+
+@code {
+    [Parameter]
+    public string Url { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Variant { get; set; } = "solid";
+
+    [Parameter]
+    public string IconUrl { get; set; } = string.Empty;
+
+    private string GetButtonClass()
+    {
+        var baseClass = "flex gap-2 px-5 py-2.5 rounded-md transition-all";
+        
+        return Variant switch
+        {
+            "outline" => $"{baseClass} border border-solid border-neutral-800 text-neutral-800 hover:bg-neutral-100",
+            "solid" => $"{baseClass} text-white bg-indigo-500 hover:bg-indigo-600",
+            _ => baseClass
+        };
+    }
+}

@@ -1,0 +1,39 @@
+@* Newsletter subscription form component *@
+
+<form class="flex gap-2 mt-2 max-md:flex-col" @onsubmit="HandleSubmit">
+    <input type="email" 
+           @bind="email" 
+           placeholder="Enter your email" 
+           class="flex-1 px-4 py-3 text-sm bg-white border border-neutral-300 rounded-md focus:outline-none focus:border-indigo-500"
+           required />
+    <button type="submit" 
+            class="px-6 py-3 text-sm font-semibold text-white bg-indigo-500 rounded-md hover:bg-indigo-600 transition-colors">
+        Subscribe
+    </button>
+</form>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <p class="mt-2 text-sm @(isSuccess ? "text-green-500" : "text-red-500")">@message</p>
+}
+
+@code {
+    private string email = string.Empty;
+    private string message = string.Empty;
+    private bool isSuccess = false;
+
+    private void HandleSubmit()
+    {
+        if (!string.IsNullOrEmpty(email))
+        {
+            message = "Thank you for subscribing!";
+            isSuccess = true;
+            email = string.Empty;
+        }
+        else
+        {
+            message = "Please enter a valid email address.";
+            isSuccess = false;
+        }
+    }
+}

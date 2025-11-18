@@ -1,0 +1,198 @@
+@page "/courses/detail/{id}"
+@inject ICourseService CourseService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>@(course?.Title ?? "Course Detail") - LearnHub</PageTitle>
+
+<Header />
+
+@if (isLoading)
+{
+    <div class="min-h-screen flex items-center justify-center">
+        <p class="text-xl">Loading course details...</p>
+    </div>
+}
+else if (course == null)
+{
+    <div class="min-h-screen flex items-center justify-center">
+        <p class="text-xl text-red-500">Course not found</p>
+    </div>
+}
+else
+{
+    <div class="min-h-screen bg-white">
+        <div class="bg-indigo-500 text-white py-16">
+            <div class="max-w-6xl mx-auto px-8">
+                <h1 class="text-4xl font-bold mb-4">@course.Title</h1>
+                <p class="text-xl mb-6">@course.Description</p>
+                <div class="flex items-center gap-4">
+                    <span class="text-lg">★★★★☆</span>
+                    <span class="text-sm">4.5 (2,145 reviews)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-8 py-12">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                <div class="col-span-2">
+                    <section class="mb-12">
+                        <h2 class="text-2xl text-indigo-500 font-semibold mb-4">Instructor</h2>
+                        <div class="flex">
+                            <div class="flex justify-center items-center w-15 h-15 rounded-full border-2 border-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4a5565" stroke-width="2">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                            <div class="flex flex-col ml-4">
+                                <h2 class="text-xl font-bold text-gray-600 hover:underline cursor-pointer">
+                                    @course.Instructor.Name
+                                </h2>
+                                <p class="text-gray-600 text-sm mt-1">
+                                    @course.Instructor.Biography
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-2 w-full flex flex-col gap-2 text-gray-700 text-sm">
+                            <div class="flex items-center gap-2">
+                                <span class="text-yellow-500 text-lg">★</span>
+                                <span>Calificación del instructor: <strong>4.7</strong></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span>🏆</span>
+                                <span>126,923 reseñas</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span>👥</span>
+                                <span>444,382 estudiantes</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span>🎥</span>
+                                <span>27 cursos</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="mb-12">
+                        <h4 class="text-2xl text-indigo-500 font-semibold mb-4">What You will Learn</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            @foreach (var item in learningPoints)
+                            {
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span class="text-gray-700">@item</span>
+                                </div>
+                            }
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 class="text-2xl font-semibold mb-4">Course Content</h2>
+                        <div class="space-y-4">
+                            @foreach (var courseSection in courseSections)
+                            {
+                                <div class="border rounded-lg p-4">
+                                    <div class="flex justify-between items-center">
+                                        <h3 class="font-semibold text-indigo-500">@courseSection.Title</h3>
+                                        <div class="text-sm text-gray-500">
+                                            @courseSection.Lessons lessons • @courseSection.Duration
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-span-1">
+                    <div class="bg-white shadow-sm rounded-lg p-6 sticky top-6">
+                        <div class="mb-6">
+                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/82c319dfc98b16e62632f59e7bcea418ad3eaf5678be48e3793b33d318f1ab09"
+                                 alt="Course Preview"
+                                 class="w-full rounded-lg mb-4" />
+                            <div class="text-3xl font-bold mb-4">$@course.Price</div>
+                            <button class="w-full bg-indigo-500 text-white py-3 rounded-lg font-semibold mb-3 cursor-pointer hover:bg-indigo-600">
+                                Enroll Now
+                            </button>
+                            <button class="w-full border border-indigo-500 text-indigo-500 py-3 rounded-lg font-semibold cursor-pointer hover:bg-indigo-50">
+                                Add to Wishlist
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Duration</span>
+                                <span class="font-semibold text-gray-600">@course.Duration hours</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Modality</span>
+                                <span class="font-semibold text-gray-600">@course.Modality</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Available Seats</span>
+                                <span class="font-semibold text-gray-600">@course.AvailableSeats</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Certificate</span>
+                                <span class="font-semibold text-gray-600">@course.Certification</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<Footer />
+
+@code {
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+
+    private Course? course;
+    private bool isLoading = true;
+
+    private string[] learningPoints = new[]
+    {
+        "JavaScript fundamentals and syntax",
+        "Working with arrays and objects",
+        "Functions and scope",
+        "DOM manipulation",
+        "Event handling",
+        "Asynchronous programming",
+        "Error handling",
+        "Modern ES6+ features"
+    };
+
+    private CourseSection[] courseSections = new[]
+    {
+        new CourseSection { Title = "Introduction to JavaScript", Lessons = 5, Duration = "45 min" },
+        new CourseSection { Title = "Variables and Data Types", Lessons = 8, Duration = "1h 15min" },
+        new CourseSection { Title = "Control Flow", Lessons = 6, Duration = "55 min" },
+        new CourseSection { Title = "Functions", Lessons = 7, Duration = "1h 30min" }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCourse();
+    }
+
+    private async Task LoadCourse()
+    {
+        isLoading = true;
+        course = await CourseService.GetCourseByIdAsync(Id);
+        isLoading = false;
+    }
+
+    private class CourseSection
+    {
+        public string Title { get; set; } = string.Empty;
+        public int Lessons { get; set; }
+        public string Duration { get; set; } = string.Empty;
+    }
+}
