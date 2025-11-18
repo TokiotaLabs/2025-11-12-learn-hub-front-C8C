@@ -1,0 +1,184 @@
+@page "/new"
+@page "/new/{id?}"
+@inject ICourseService CourseService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>@(isEditing ? "Edit Course" : "Create Course") - LearnHub</PageTitle>
+
+<Header />
+
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-4xl mx-auto px-8">
+        <h1 class="text-4xl font-bold mb-8">@(isEditing ? "Edit Course" : "Create New Course")</h1>
+
+        <EditForm Model="@formData" OnValidSubmit="@HandleSubmit" class="bg-white shadow-md rounded-lg p-8">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-red-500 mb-4" />
+
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-2">Course Title</label>
+                <InputText @bind-Value="formData.Title" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-2">Description</label>
+                <InputTextArea @bind-Value="formData.Description" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Start Date</label>
+                    <InputText @bind-Value="formData.StartDate" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">End Date</label>
+                    <InputText @bind-Value="formData.EndDate" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Duration (hours)</label>
+                    <InputNumber @bind-Value="formData.Duration" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Price ($)</label>
+                    <InputNumber @bind-Value="formData.Price" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-2">Prerequisites</label>
+                <InputText @bind-Value="formData.Prerequisites" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-2">Instructor ID</label>
+                <InputText @bind-Value="formData.InstructorId" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Modality</label>
+                    <InputText @bind-Value="formData.Modality" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Category</label>
+                    <InputText @bind-Value="formData.Category" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-2">Included Materials</label>
+                <InputText @bind-Value="formData.IncludedMaterials" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Certification</label>
+                    <InputText @bind-Value="formData.Certification" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Available Seats</label>
+                    <InputNumber @bind-Value="formData.AvailableSeats" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-2">Location</label>
+                <InputText @bind-Value="formData.Location" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="px-6 py-3 bg-indigo-500 text-white rounded-md font-semibold hover:bg-indigo-600">
+                    @(isEditing ? "Update Course" : "Create Course")
+                </button>
+                <button type="button" @onclick="@(() => Navigation.NavigateTo("/courses"))" class="px-6 py-3 bg-gray-300 text-gray-700 rounded-md font-semibold hover:bg-gray-400">
+                    Cancel
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<Modal IsOpen="@isModalOpen" 
+       OnClose="@CloseModal" 
+       OnAction="@CloseModal"
+       Title="Success">
+    <p class="text-indigo-500 text-center font-medium text-lg">
+        Course @(isEditing ? "updated" : "created") successfully!
+    </p>
+</Modal>
+
+<Footer />
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    private Course formData = new();
+    private bool isEditing = false;
+    private bool isModalOpen = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(Id))
+        {
+            isEditing = true;
+            var course = await CourseService.GetCourseByIdAsync(Id);
+            if (course != null)
+            {
+                formData = course;
+            }
+        }
+        else
+        {
+            // Set default values for new course
+            formData = new Course
+            {
+                Description = "des",
+                StartDate = "2025-03-21T09:59:35.314Z",
+                EndDate = "2025-04-21T09:59:35.314Z",
+                Duration = 10,
+                Price = 100,
+                Prerequisites = "prerequisites",
+                InstructorId = "c7d42d4c-9ac4-49b0-8ea4-9644c045c94c",
+                Modality = "modality",
+                IncludedMaterials = "includedMaterials",
+                Certification = "certification",
+                AvailableSeats = 100,
+                Location = "location",
+                Category = "category"
+            };
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            if (isEditing && !string.IsNullOrEmpty(formData.Id))
+            {
+                await CourseService.UpdateCourseAsync(formData.Id, formData);
+            }
+            else
+            {
+                await CourseService.CreateCourseAsync(formData);
+            }
+            
+            isModalOpen = true;
+        }
+        catch (Exception ex)
+        {
+            // Handle error - could show error message to user
+            Console.WriteLine($"Error saving course: {ex.Message}");
+        }
+    }
+
+    private void CloseModal()
+    {
+        isModalOpen = false;
+        Navigation.NavigateTo("/courses");
+    }
+}

@@ -1,0 +1,87 @@
+@page "/courses"
+@inject ICourseService CourseService
+@rendermode InteractiveServer
+
+<PageTitle>Courses - LearnHub</PageTitle>
+
+<div class="flex overflow-hidden flex-col bg-white">
+    <Header />
+
+    <main class="flex flex-col px-20 py-14 w-full max-md:px-5 max-md:max-w-full">
+        <div class="flex flex-col w-full max-w-[1176px] mx-auto max-md:max-w-full">
+            <h1 class="text-4xl font-bold text-black mb-8">Course Catalog</h1>
+            
+            <SearchBar OnSearch="@HandleSearch" />
+
+            @if (isLoading)
+            {
+                <div class="text-center mt-10">Loading courses...</div>
+            }
+            else if (filteredCourses.Any())
+            {
+                <div class="grid grid-cols-2 max-md:grid-cols-1 gap-5 mt-10">
+                    @foreach (var course in filteredCourses)
+                    {
+                        <CourseCard Course="@course" OnChange="@LoadCourses" />
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center mt-10 text-gray-500">
+                    @if (string.IsNullOrEmpty(searchQuery))
+                    {
+                        <p>No courses available</p>
+                    }
+                    else
+                    {
+                        <p>No courses found matching "@searchQuery"</p>
+                    }
+                </div>
+            }
+        </div>
+    </main>
+
+    <Footer />
+</div>
+
+@code {
+    private List<Course> courses = new();
+    private List<Course> filteredCourses = new();
+    private bool isLoading = true;
+    private string searchQuery = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCourses();
+    }
+
+    private async Task LoadCourses()
+    {
+        isLoading = true;
+        var result = await CourseService.GetCoursesAsync();
+        courses = result.ToList();
+        filteredCourses = courses;
+        isLoading = false;
+    }
+
+    private Task HandleSearch(string query)
+    {
+        searchQuery = query;
+        
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            filteredCourses = courses;
+        }
+        else
+        {
+            filteredCourses = courses.Where(c => 
+                c.Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                c.Description.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                c.Category.Contains(query, StringComparison.OrdinalIgnoreCase)
+            ).ToList();
+        }
+
+        return Task.CompletedTask;
+    }
+}

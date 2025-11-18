@@ -1,0 +1,21 @@
+@* Header component with navigation and authentication buttons *@
+
+<header class="flex flex-wrap gap-5 justify-between px-6 py-0.5 w-full bg-white shadow-sm max-md:px-5 max-md:max-w-full">
+    <div class="flex flex-wrap gap-10 whitespace-nowrap">
+        <a href="/" class="flex gap-2.5 my-auto text-3xl text-black">
+            <img loading="lazy"
+                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/48b6d4306273d64ca054dedb3bc30ebbbbb8e97dfd3c2faffcfa1937631d151b?placeholderIfAbsent=true&apiKey=43f93c4c444042188d8c548c6db7827a"
+                 alt="LearnHub logo"
+                 class="object-contain shrink-0 my-auto w-9 aspect-square" />
+            <div class="basis-auto">LearnHub</div>
+        </a>
+        <Navigation />
+    </div>
+    <div class="flex gap-4 my-auto text-sm leading-loose">
+        <AuthButton Url="/sign-up" Label="Sign Up" Variant="outline" 
+                    IconUrl="https://cdn.builder.io/api/v1/image/assets/TEMP/6810e255885f5b90fc97b660927de67d9e33675c6d1a6f5b377da140257fbc1b?placeholderIfAbsent=true&apiKey=43f93c4c444042188d8c548c6db7827a" />
+        <AuthButton Url="/sign-in" Label="Sign In" Variant="solid"
+                    IconUrl="https://cdn.builder.io/api/v1/image/assets/TEMP/49d4e4c88334cf38a88fd2471d65bd3852400ddfa054742c489b7e2ae99279c6?placeholderIfAbsent=true&apiKey=43f93c4c444042188d8c548c6db7827a" />
+        <AuthButton Url="/new" Label="New" Variant="solid" IconUrl="" />
+    </div>
+</header>

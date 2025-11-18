@@ -1,0 +1,86 @@
+@page "/profile"
+@rendermode InteractiveServer
+
+<PageTitle>Profile - LearnHub</PageTitle>
+
+<Header />
+
+<div class="min-h-screen bg-white p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">My Profile</h1>
+
+        <div class="bg-white shadow-sm rounded-lg p-6 mb-6">
+            <div class="flex items-center mb-6">
+                <div class="w-24 h-24 bg-gray-200 rounded-full overflow-hidden">
+                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b534601d007320f6771351236592144b24d4f30705bbd1beaee32856f6e07cdf"
+                         alt="Profile"
+                         class="w-full h-full object-cover" />
+                </div>
+                <div class="ml-6">
+                    <h2 class="text-2xl font-semibold text-gray-900">Emily Johnson</h2>
+                    <p class="text-gray-600">Software Developer</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Contact Information</h3>
+                    <div class="space-y-2 text-gray-600">
+                        <p>Email: emily.johnson@example.com</p>
+                        <p>Phone: (555) 123-4567</p>
+                        <p>Location: San Francisco, CA</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Learning Progress</h3>
+                    <div class="space-y-2">
+                        <div>
+                            <p class="text-gray-600">Courses Completed</p>
+                            <p class="text-2xl font-bold text-indigo-500">12</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Certificates Earned</p>
+                            <p class="text-2xl font-bold text-indigo-500">8</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-sm rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-4">Enrolled Courses</h3>
+            <div class="space-y-4">
+                @foreach (var course in enrolledCourses)
+                {
+                    <div class="border-b pb-4 last:border-b-0">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">@course.Name</span>
+                            <span class="text-indigo-500">@course.Progress%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-indigo-500 rounded-full h-2" style="width: @(course.Progress)%"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<Footer />
+
+@code {
+    private EnrolledCourse[] enrolledCourses = new[]
+    {
+        new EnrolledCourse { Name = "JavaScript 101", Progress = 75 },
+        new EnrolledCourse { Name = "React Fundamentals", Progress = 45 },
+        new EnrolledCourse { Name = "TypeScript Essentials", Progress = 90 }
+    };
+
+    private class EnrolledCourse
+    {
+        public string Name { get; set; } = string.Empty;
+        public int Progress { get; set; }
+    }
+}
